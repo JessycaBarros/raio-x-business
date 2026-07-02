@@ -5,6 +5,8 @@ import type { TrpcContext } from "./_core/context";
 // Mock the database and notification
 vi.mock("./db", () => ({
   saveLead: vi.fn().mockResolvedValue(undefined),
+  syncLeadToNotion: vi.fn().mockResolvedValue(true),
+  markLeadSynced: vi.fn().mockResolvedValue(undefined),
   getNotionTemplateUrl: vi.fn((profile: string) => {
     const urls: Record<string, string> = {
       visibilidade: "https://app.notion.com/p/test-visibilidade",

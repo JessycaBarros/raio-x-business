@@ -4,7 +4,7 @@ import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import { calculateProfile, PROFILES, type ProfileType, PROFILE_INFO } from "@shared/quiz";
-import { saveLead, getNotionTemplateUrl } from "./db";
+import { saveLead, getNotionTemplateUrl, syncLeadToNotion } from "./db";
 import { notifyOwner } from "./_core/notification";
 
 export const appRouter = router({
@@ -50,6 +50,14 @@ export const appRouter = router({
           profile,
           answers: JSON.stringify(input.answers),
         });
+
+        // Sync lead to Notion database
+        syncLeadToNotion({
+          name: input.lead.name,
+          email: input.lead.email,
+          phone: input.lead.phone,
+          profile,
+        }).catch(() => {}); // fire and forget
 
         // Notify owner about new lead
         const profileTitle = PROFILE_INFO[profile]?.title || profile;

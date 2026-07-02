@@ -126,3 +126,70 @@ const NOTION_TEMPLATE_URLS: Record<string, string> = {
 export function getNotionTemplateUrl(profile: string): string {
   return NOTION_TEMPLATE_URLS[profile] || "";
 }
+
+// Sync lead to Notion database via Notion API
+const NOTION_DATA_SOURCE_ID = "7624f005-5e18-4de4-a478-6e216e33d5d8";
+
+const PROFILE_LABELS: Record<string, string> = {
+  visibilidade: "Visibilidade",
+  autoridade: "Autoridade",
+  conteudo_sem_venda: "Conteudo sem Venda",
+  funil: "Funil",
+  trafego_organico: "Trafego Organico",
+  anuncio_ineficiente: "Anuncio Ineficiente",
+  estrutura: "Estrutura",
+};
+
+export async function syncLeadToNotion(lead: {
+  name: string;
+  email: string;
+  phone: string;
+  profile: string;
+}): Promise<boolean> {
+  try {
+    const notionToken = process.env.NOTION_API_TOKEN;
+    
+    if (!notionToken) {
+      console.warn("[Notion Sync] NOTION_API_TOKEN not configured, skipping Notion sync");
+      return false;
+    }
+
+    const profileLabel = PROFILE_LABELS[lead.profile] || lead.profile;
+
+    const response = await fetch("https://api.notion.com/v1/pages", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${notionToken}`,
+        "Content-Type": "application/json",
+        "Notion-Version": "2022-06-28",
+      },
+      body: JSON.stringify({
+        parent: { database_id: NOTION_DATA_SOURCE_ID },
+        properties: {
+          "Nome": { title: [{ text: { content: lead.name } }] },
+          "Email": { email: lead.email },
+          "Telefone": { phone_number: lead.phone },
+          "Perfil": { select: { name: profileLabel } },
+        },
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => "");
+      console.error(`[Notion Sync] Failed (${response.status}): ${errorText}`);
+      return false;
+    }
+
+    console.log(`[Notion Sync] Lead ${lead.name} (${profileLabel}) synced to Notion successfully.`);
+    return true;
+  } catch (error) {
+    console.error("[Notion Sync] Error syncing lead to Notion:", error);
+    return false;
+  }
+}
+
+export async function markLeadSynced(leadId: number): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  await db.update(leads).set({ notionSynced: 1 }).where(eq(leads.id, leadId));
+}
