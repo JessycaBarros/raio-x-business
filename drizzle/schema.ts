@@ -25,4 +25,25 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// TODO: Add your tables here
+// Leads captured from the RAIO-X Business quiz
+export const leads = mysqlTable("leads", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 320 }).notNull(),
+  phone: varchar("phone", { length: 30 }).notNull(),
+  profile: mysqlEnum("profile", [
+    "visibilidade",
+    "autoridade",
+    "conteudo_sem_venda",
+    "funil",
+    "trafego_organico",
+    "anuncio_ineficiente",
+    "estrutura"
+  ]).notNull(),
+  answers: text("answers"), // JSON string of quiz answers
+  notionSynced: int("notionSynced").default(0).notNull(), // 0 = not synced, 1 = synced
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Lead = typeof leads.$inferSelect;
+export type InsertLead = typeof leads.$inferInsert;

@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, leads } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,40 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// Save a new lead from the quiz
+export async function saveLead(lead: {
+  name: string;
+  email: string;
+  phone: string;
+  profile: string;
+  answers: string;
+}) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot save lead: database not available");
+    return;
+  }
+
+  await db.insert(leads).values({
+    name: lead.name,
+    email: lead.email,
+    phone: lead.phone,
+    profile: lead.profile as any,
+    answers: lead.answers,
+  });
+}
+
+// Notion template URLs for each profile
+const NOTION_TEMPLATE_URLS: Record<string, string> = {
+  visibilidade: "https://app.notion.com/p/391198ba152c81bd9df2f7a0aa1f69de",
+  autoridade: "https://app.notion.com/p/391198ba152c813fb553c4f9e4f33eec",
+  conteudo_sem_venda: "https://app.notion.com/p/391198ba152c81d9bdbee10813bec25f",
+  funil: "https://app.notion.com/p/391198ba152c8173810ac46c0fc32d19",
+  trafego_organico: "https://app.notion.com/p/391198ba152c81378be1c276d07e9e6a",
+  anuncio_ineficiente: "https://app.notion.com/p/391198ba152c81ab91caec37b72638bb",
+  estrutura: "https://app.notion.com/p/391198ba152c81b09bf7f9f82ebcfe1d",
+};
+
+export function getNotionTemplateUrl(profile: string): string {
+  return NOTION_TEMPLATE_URLS[profile] || "";
+}
