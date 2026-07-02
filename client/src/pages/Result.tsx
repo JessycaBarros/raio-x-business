@@ -55,7 +55,7 @@ export default function Result() {
               className="mb-6"
             >
               <img
-                src="/manus-storage/jessyca_1994_ccefb90e.jpg"
+                src="/manus-storage/jessyca_new_adc024a5.webp"
                 alt="Jessyca Barros"
                 className="w-20 h-20 rounded-full object-cover mx-auto border-2 border-[oklch(0.62_0.1_45/0.3)] shadow-md"
               />
