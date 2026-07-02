@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 import { QUIZ_QUESTIONS, type QuizAnswers } from "@shared/quiz";
 import { useLocation } from "wouter";
 import LeadForm from "@/components/LeadForm";
 
 export default function Quiz() {
   const [, navigate] = useLocation();
-  const [currentStep, setCurrentStep] = useState(0); // 0-5 = questions, 6 = lead form
+  const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<QuizAnswers>({});
   const [direction, setDirection] = useState(1);
 
@@ -23,7 +22,6 @@ export default function Quiz() {
     if (!currentQuestion) return;
     setAnswers((prev) => ({ ...prev, [currentQuestion.id]: optionId }));
     
-    // Auto-advance after selection with a small delay
     setTimeout(() => {
       setDirection(1);
       setCurrentStep((prev) => prev + 1);
@@ -44,7 +42,7 @@ export default function Quiz() {
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/30">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
         <div className="container max-w-3xl px-6 py-4 flex items-center justify-between">
           <button
             onClick={handleBack}
@@ -54,7 +52,7 @@ export default function Quiz() {
             Voltar
           </button>
           <div className="text-center">
-            <span className="text-xs uppercase tracking-[0.2em] text-[oklch(0.78_0.12_85)] font-body font-medium">
+            <span className="text-xs uppercase tracking-[0.2em] text-[oklch(0.62_0.1_45)] font-body font-medium">
               RAIO-X Business
             </span>
           </div>
@@ -63,9 +61,9 @@ export default function Quiz() {
           </span>
         </div>
         {/* Progress bar */}
-        <div className="h-0.5 bg-border/30">
+        <div className="h-0.5 bg-border">
           <motion.div
-            className="h-full gold-bg"
+            className="h-full rosegold-bg"
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
@@ -87,7 +85,7 @@ export default function Quiz() {
                 transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
               >
                 <div className="mb-10">
-                  <h2 className="text-2xl md:text-3xl font-heading font-bold mb-2">
+                  <h2 className="text-2xl md:text-3xl font-heading font-bold mb-2 text-foreground">
                     {currentQuestion.question}
                   </h2>
                   {currentQuestion.subtitle && (
@@ -107,20 +105,20 @@ export default function Quiz() {
                       onClick={() => handleSelectOption(option.id)}
                       className={`w-full text-left p-5 rounded-xl border transition-all duration-200 font-body ${
                         selectedOption === option.id
-                          ? "border-[oklch(0.78_0.12_85)] bg-[oklch(0.78_0.12_85/0.08)] text-foreground"
-                          : "border-border/50 bg-card/30 hover:border-[oklch(0.78_0.12_85/0.4)] hover:bg-card/50 text-foreground"
+                          ? "border-[oklch(0.62_0.1_45)] bg-[oklch(0.62_0.1_45/0.06)] text-foreground shadow-sm"
+                          : "border-border bg-card hover:border-[oklch(0.62_0.1_45/0.4)] hover:shadow-sm text-foreground"
                       }`}
                     >
                       <div className="flex items-center gap-4">
                         <div
                           className={`w-5 h-5 rounded-full border-2 shrink-0 flex items-center justify-center transition-colors ${
                             selectedOption === option.id
-                              ? "border-[oklch(0.78_0.12_85)] bg-[oklch(0.78_0.12_85)]"
+                              ? "border-[oklch(0.62_0.1_45)] bg-[oklch(0.62_0.1_45)]"
                               : "border-muted-foreground/40"
                           }`}
                         >
                           {selectedOption === option.id && (
-                            <div className="w-2 h-2 rounded-full bg-primary-foreground" />
+                            <div className="w-2 h-2 rounded-full bg-white" />
                           )}
                         </div>
                         <span className="text-sm md:text-base">{option.text}</span>

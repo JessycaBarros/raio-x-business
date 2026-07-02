@@ -14,3 +14,5 @@
 - [x] Configurar templates Notion como páginas públicas duplicáveis (standalone pages - share link)
 - [x] MANUAL: Jessyca precisa ativar 'Share to web' + 'Allow duplicate' em cada template no Notion (instrucoes na entrega)
 - [x] Adicionar testes Vitest para endpoints quiz.submit e quiz.getTemplateUrl
+- [x] Atualizar identidade visual para corresponder ao rebranding real da Jessyca Barros
+- [x] Adicionar foto da Jessyca na landing page do diagnóstico

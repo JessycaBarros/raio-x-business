@@ -20,7 +20,6 @@ export default function LeadForm({ answers }: LeadFormProps) {
 
   const submitMutation = trpc.quiz.submit.useMutation({
     onSuccess: (data) => {
-      // Navigate to result page with profile data
       navigate(`/resultado?profile=${data.profile}`);
     },
   });
@@ -56,15 +55,15 @@ export default function LeadForm({ answers }: LeadFormProps) {
   return (
     <div>
       <div className="mb-8 text-center">
-        <div className="w-16 h-16 rounded-full gold-bg flex items-center justify-center mx-auto mb-5">
-          <Lock className="h-7 w-7 text-primary-foreground" />
+        <div className="w-16 h-16 rounded-full rosegold-bg flex items-center justify-center mx-auto mb-5">
+          <Lock className="h-7 w-7 text-white" />
         </div>
-        <h2 className="text-2xl md:text-3xl font-heading font-bold mb-3">
+        <h2 className="text-2xl md:text-3xl font-heading font-bold mb-3 text-foreground">
           Seu diagnóstico está pronto!
         </h2>
         <p className="text-muted-foreground font-body max-w-md mx-auto">
           Preencha seus dados abaixo para receber seu{" "}
-          <span className="text-[oklch(0.78_0.12_85)]">Plano de Crescimento de 15 Dias</span>{" "}
+          <span className="text-[oklch(0.62_0.1_45)] font-medium">Plano de Crescimento de 15 Dias</span>{" "}
           personalizado.
         </p>
       </div>
@@ -80,7 +79,7 @@ export default function LeadForm({ answers }: LeadFormProps) {
             placeholder="Como você se chama?"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="bg-input border-border/50 text-foreground placeholder:text-muted-foreground font-body h-12 rounded-xl focus:border-[oklch(0.78_0.12_85)] focus:ring-[oklch(0.78_0.12_85/0.2)]"
+            className="bg-card border-border text-foreground placeholder:text-muted-foreground font-body h-12 rounded-xl focus:border-[oklch(0.62_0.1_45)] focus:ring-[oklch(0.62_0.1_45/0.2)]"
           />
           {errors.name && <p className="text-xs text-destructive font-body">{errors.name}</p>}
         </div>
@@ -95,7 +94,7 @@ export default function LeadForm({ answers }: LeadFormProps) {
             placeholder="seu@email.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="bg-input border-border/50 text-foreground placeholder:text-muted-foreground font-body h-12 rounded-xl focus:border-[oklch(0.78_0.12_85)] focus:ring-[oklch(0.78_0.12_85/0.2)]"
+            className="bg-card border-border text-foreground placeholder:text-muted-foreground font-body h-12 rounded-xl focus:border-[oklch(0.62_0.1_45)] focus:ring-[oklch(0.62_0.1_45/0.2)]"
           />
           {errors.email && <p className="text-xs text-destructive font-body">{errors.email}</p>}
         </div>
@@ -110,7 +109,7 @@ export default function LeadForm({ answers }: LeadFormProps) {
             placeholder="(00) 00000-0000"
             value={phone}
             onChange={(e) => setPhone(formatPhone(e.target.value))}
-            className="bg-input border-border/50 text-foreground placeholder:text-muted-foreground font-body h-12 rounded-xl focus:border-[oklch(0.78_0.12_85)] focus:ring-[oklch(0.78_0.12_85/0.2)]"
+            className="bg-card border-border text-foreground placeholder:text-muted-foreground font-body h-12 rounded-xl focus:border-[oklch(0.62_0.1_45)] focus:ring-[oklch(0.62_0.1_45/0.2)]"
           />
           {errors.phone && <p className="text-xs text-destructive font-body">{errors.phone}</p>}
         </div>
@@ -118,7 +117,7 @@ export default function LeadForm({ answers }: LeadFormProps) {
         <Button
           type="submit"
           disabled={submitMutation.isPending}
-          className="w-full gold-bg text-primary-foreground py-6 text-base font-body font-semibold rounded-xl hover:opacity-90 transition-all duration-200 active:scale-[0.97] mt-4"
+          className="w-full rosegold-bg text-white py-6 text-base font-body font-semibold rounded-xl hover:opacity-90 transition-all duration-200 active:scale-[0.97] mt-4 shadow-[0_4px_16px_oklch(0.62_0.1_45/0.2)]"
         >
           {submitMutation.isPending ? (
             <>

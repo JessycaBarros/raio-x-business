@@ -5,7 +5,6 @@ import { PROFILE_INFO, type ProfileType } from "@shared/quiz";
 import { trpc } from "@/lib/trpc";
 
 export default function Result() {
-  // Get profile from URL params
   const params = new URLSearchParams(window.location.search);
   const profile = params.get("profile") as ProfileType | null;
 
@@ -27,10 +26,15 @@ export default function Result() {
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       {/* Header */}
-      <header className="py-6 px-6 border-b border-border/30">
-        <div className="container max-w-3xl text-center">
-          <span className="text-xs uppercase tracking-[0.2em] text-[oklch(0.78_0.12_85)] font-body font-medium">
-            RAIO-X Business — Seu Diagnóstico
+      <header className="py-6 px-6 border-b border-border">
+        <div className="container max-w-3xl flex items-center justify-center gap-4">
+          <img
+            src="/manus-storage/logo_01_acea916a.png"
+            alt="Jessyca Barros"
+            className="h-8 w-auto"
+          />
+          <span className="text-xs uppercase tracking-[0.2em] text-[oklch(0.62_0.1_45)] font-body font-medium">
+            — Seu Diagnóstico
           </span>
         </div>
       </header>
@@ -43,15 +47,29 @@ export default function Result() {
             transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
             className="text-center"
           >
+            {/* Jessyca's photo - small avatar */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="mb-6"
+            >
+              <img
+                src="/manus-storage/jessyca_1994_ccefb90e.jpg"
+                alt="Jessyca Barros"
+                className="w-20 h-20 rounded-full object-cover mx-auto border-2 border-[oklch(0.62_0.1_45/0.3)] shadow-md"
+              />
+            </motion.div>
+
             {/* Badge */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[oklch(0.78_0.12_85/0.3)] bg-[oklch(0.78_0.12_85/0.05)] mb-8"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[oklch(0.62_0.1_45/0.3)] bg-[oklch(0.62_0.1_45/0.05)] mb-8"
             >
-              <Sparkles className="h-4 w-4 text-[oklch(0.78_0.12_85)]" />
-              <span className="text-sm font-body text-[oklch(0.78_0.12_85)]">
+              <Sparkles className="h-4 w-4 text-[oklch(0.62_0.1_45)]" />
+              <span className="text-sm font-body text-[oklch(0.62_0.1_45)]">
                 Diagnóstico Concluído
               </span>
             </motion.div>
@@ -63,7 +81,7 @@ export default function Result() {
               transition={{ delay: 0.3 }}
               className="text-3xl md:text-4xl font-heading font-bold mb-4"
             >
-              <span className="gold-gradient">{info.title}</span>
+              <span className="rosegold-gradient">{info.title}</span>
             </motion.h1>
 
             {/* Subtitle */}
@@ -91,9 +109,9 @@ export default function Result() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="p-8 rounded-2xl border border-[oklch(0.78_0.12_85/0.3)] bg-[oklch(0.78_0.12_85/0.03)] mb-6"
+              className="p-8 rounded-2xl border border-[oklch(0.62_0.1_45/0.25)] bg-[oklch(0.62_0.1_45/0.03)] mb-6"
             >
-              <h3 className="text-xl font-heading font-semibold mb-3">
+              <h3 className="text-xl font-heading font-semibold mb-3 text-foreground">
                 Seu Plano de Crescimento de 15 Dias
               </h3>
               <p className="text-muted-foreground font-body text-sm mb-6 max-w-md mx-auto">
@@ -103,7 +121,7 @@ export default function Result() {
               {templateData?.url ? (
                 <Button
                   asChild
-                  className="gold-bg text-primary-foreground px-8 py-6 text-base font-body font-semibold rounded-xl hover:opacity-90 transition-all duration-200 active:scale-[0.97]"
+                  className="rosegold-bg text-white px-8 py-6 text-base font-body font-semibold rounded-xl hover:opacity-90 transition-all duration-200 active:scale-[0.97] shadow-[0_4px_16px_oklch(0.62_0.1_45/0.2)]"
                 >
                   <a href={templateData.url} target="_blank" rel="noopener noreferrer">
                     Acessar Meu Plano no Notion
@@ -113,7 +131,7 @@ export default function Result() {
               ) : (
                 <Button
                   disabled
-                  className="gold-bg text-primary-foreground px-8 py-6 text-base font-body font-semibold rounded-xl opacity-70"
+                  className="rosegold-bg text-white px-8 py-6 text-base font-body font-semibold rounded-xl opacity-70"
                 >
                   Carregando seu plano...
                 </Button>
@@ -128,15 +146,15 @@ export default function Result() {
               className="text-sm text-muted-foreground font-body space-y-2"
             >
               <p className="flex items-center justify-center gap-2">
-                <ArrowRight className="h-3 w-3 text-[oklch(0.78_0.12_85)]" />
+                <ArrowRight className="h-3 w-3 text-[oklch(0.62_0.1_45)]" />
                 Clique em "Duplicar" no Notion para salvar na sua conta
               </p>
               <p className="flex items-center justify-center gap-2">
-                <ArrowRight className="h-3 w-3 text-[oklch(0.78_0.12_85)]" />
+                <ArrowRight className="h-3 w-3 text-[oklch(0.62_0.1_45)]" />
                 Siga o cronograma dia a dia por 15 dias
               </p>
               <p className="flex items-center justify-center gap-2">
-                <ArrowRight className="h-3 w-3 text-[oklch(0.78_0.12_85)]" />
+                <ArrowRight className="h-3 w-3 text-[oklch(0.62_0.1_45)]" />
                 Marque cada tarefa conforme for executando
               </p>
             </motion.div>
@@ -145,10 +163,10 @@ export default function Result() {
       </main>
 
       {/* Footer */}
-      <footer className="py-8 px-6 border-t border-border/30">
+      <footer className="py-8 px-6 border-t border-border">
         <div className="container max-w-4xl text-center">
           <p className="text-sm text-muted-foreground font-body">
-            © {new Date().getFullYear()} Jessyca Barros — Estrategista de Crescimento Digital
+            © {new Date().getFullYear()} Jessyca Barros — Estrategista Digital
           </p>
         </div>
       </footer>

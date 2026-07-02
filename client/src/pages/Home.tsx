@@ -10,51 +10,73 @@ export default function Home() {
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-[oklch(0.12_0.005_285)]" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full bg-[oklch(0.78_0.12_85/0.03)] blur-[120px]" />
+        {/* Soft gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[oklch(0.94_0.02_55)] via-background to-background" />
+        <div className="absolute top-20 right-0 w-[500px] h-[500px] rounded-full bg-[oklch(0.62_0.1_45/0.06)] blur-[100px]" />
+        <div className="absolute bottom-20 left-0 w-[400px] h-[400px] rounded-full bg-[oklch(0.85_0.04_55/0.15)] blur-[80px]" />
         
-        <div className="relative z-10 container max-w-4xl text-center px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
-          >
-            <p className="text-sm uppercase tracking-[0.3em] text-[oklch(0.78_0.12_85)] mb-6 font-body font-medium">
-              Diagnóstico Estratégico Gratuito
-            </p>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold leading-[1.1] mb-6">
-              <span className="gold-gradient">RAIO-X</span>{" "}
-              <span className="text-foreground">Business</span>
-            </h1>
-            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-4 font-body leading-relaxed">
-              Descubra o que está impedindo seu negócio de crescer e receba um{" "}
-              <span className="text-[oklch(0.78_0.12_85)] font-medium">
-                Plano de Crescimento personalizado de 15 dias
-              </span>{" "}
-              para colocar em prática hoje.
-            </p>
-            <p className="text-sm text-muted-foreground mb-10 font-body">
-              Por <span className="text-[oklch(0.78_0.12_85)]">Jessyca Barros</span> — Estrategista de Crescimento Digital
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3, ease: [0.23, 1, 0.32, 1] }}
-          >
-            <Button
-              onClick={() => navigate("/quiz")}
-              className="gold-bg text-primary-foreground px-8 py-6 text-lg font-body font-semibold rounded-full hover:opacity-90 transition-all duration-200 active:scale-[0.97] shadow-[0_0_40px_oklch(0.78_0.12_85/0.2)]"
+        <div className="relative z-10 container max-w-5xl px-6">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            {/* Left - Text content */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
             >
-              Fazer Meu Diagnóstico Gratuito
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <p className="text-xs text-muted-foreground mt-4 font-body">
-              Leva menos de 2 minutos • 100% gratuito
-            </p>
-          </motion.div>
+              {/* Logo */}
+              <img
+                src="/manus-storage/logo_01_acea916a.png"
+                alt="Jessyca Barros - Estrategista Digital"
+                className="h-12 md:h-14 w-auto mb-8 object-contain"
+              />
+              
+              <p className="text-sm uppercase tracking-[0.25em] text-[oklch(0.62_0.1_45)] mb-4 font-body font-medium">
+                Diagnóstico Estratégico Gratuito
+              </p>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold leading-[1.1] mb-6">
+                <span className="rosegold-gradient">RAIO-X</span>{" "}
+                <span className="text-foreground">Business</span>
+              </h1>
+              <p className="text-base md:text-lg text-muted-foreground max-w-lg mb-4 font-body leading-relaxed">
+                Descubra o que está impedindo seu negócio de crescer e receba um{" "}
+                <span className="text-[oklch(0.62_0.1_45)] font-medium">
+                  Plano de Crescimento personalizado de 15 dias
+                </span>{" "}
+                para colocar em prática hoje.
+              </p>
+              <p className="text-sm text-muted-foreground mb-8 font-body">
+                Por <span className="text-[oklch(0.62_0.1_45)] font-medium">Jessyca Barros</span> — Estrategista Digital
+              </p>
+
+              <Button
+                onClick={() => navigate("/quiz")}
+                className="rosegold-bg text-white px-8 py-6 text-base font-body font-semibold rounded-full hover:opacity-90 transition-all duration-200 active:scale-[0.97] shadow-[0_4px_24px_oklch(0.62_0.1_45/0.25)]"
+              >
+                Fazer Meu Diagnóstico Gratuito
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+              <p className="text-xs text-muted-foreground mt-4 font-body">
+                Leva menos de 2 minutos • 100% gratuito
+              </p>
+            </motion.div>
+
+            {/* Right - Photo */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: [0.23, 1, 0.32, 1] }}
+              className="flex justify-center mt-8 md:mt-0"
+            >
+              <div className="relative">
+                <div className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-[oklch(0.62_0.1_45/0.15)] to-[oklch(0.85_0.04_55/0.1)] blur-xl" />
+                <img
+                  src="/manus-storage/jessyca_1994_ccefb90e.jpg"
+                  alt="Jessyca Barros"
+                  className="relative rounded-2xl w-full max-w-[240px] md:max-w-[380px] h-auto object-cover shadow-xl border border-[oklch(0.62_0.1_45/0.15)]"
+                />
+              </div>
+            </motion.div>
+          </div>
         </div>
 
         {/* Scroll indicator */}
@@ -63,8 +85,8 @@ export default function Home() {
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
         >
-          <div className="w-6 h-10 border-2 border-[oklch(0.78_0.12_85/0.3)] rounded-full flex items-start justify-center p-1.5">
-            <div className="w-1.5 h-3 bg-[oklch(0.78_0.12_85/0.5)] rounded-full" />
+          <div className="w-6 h-10 border-2 border-[oklch(0.62_0.1_45/0.3)] rounded-full flex items-start justify-center p-1.5">
+            <div className="w-1.5 h-3 bg-[oklch(0.62_0.1_45/0.5)] rounded-full" />
           </div>
         </motion.div>
       </section>
@@ -80,7 +102,7 @@ export default function Home() {
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
-              Como funciona o <span className="gold-gradient">Diagnóstico</span>
+              Como funciona o <span className="rosegold-gradient">Diagnóstico</span>
             </h2>
             <p className="text-muted-foreground font-body max-w-xl mx-auto">
               Em menos de 2 minutos, você descobre exatamente o que está travando seu crescimento
@@ -111,10 +133,10 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.15 }}
-                className="relative p-8 rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm hover:border-[oklch(0.78_0.12_85/0.3)] transition-colors duration-300"
+                className="relative p-8 rounded-2xl border border-border bg-card hover:border-[oklch(0.62_0.1_45/0.4)] hover:shadow-lg transition-all duration-300"
               >
-                <div className="w-12 h-12 rounded-xl gold-bg flex items-center justify-center mb-5">
-                  <item.icon className="h-6 w-6 text-primary-foreground" />
+                <div className="w-12 h-12 rounded-xl rosegold-bg flex items-center justify-center mb-5">
+                  <item.icon className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-xl font-heading font-semibold mb-3">{item.title}</h3>
                 <p className="text-muted-foreground font-body text-sm leading-relaxed">
@@ -127,7 +149,7 @@ export default function Home() {
       </section>
 
       {/* What you'll receive */}
-      <section className="py-24 px-6 bg-[oklch(0.12_0.005_285)]">
+      <section className="py-24 px-6 nude-section">
         <div className="container max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -137,7 +159,7 @@ export default function Home() {
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
-              O que você vai <span className="gold-gradient">receber</span>
+              O que você vai <span className="rosegold-gradient">receber</span>
             </h2>
           </motion.div>
 
@@ -155,9 +177,9 @@ export default function Home() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.1 }}
-                className="flex items-start gap-4 p-5 rounded-xl border border-border/30 bg-card/30"
+                className="flex items-start gap-4 p-5 rounded-xl border border-border bg-card shadow-sm"
               >
-                <CheckCircle2 className="h-5 w-5 text-[oklch(0.78_0.12_85)] mt-0.5 shrink-0" />
+                <CheckCircle2 className="h-5 w-5 text-[oklch(0.62_0.1_45)] mt-0.5 shrink-0" />
                 <p className="font-body text-foreground">{item}</p>
               </motion.div>
             ))}
@@ -172,7 +194,7 @@ export default function Home() {
           >
             <Button
               onClick={() => navigate("/quiz")}
-              className="gold-bg text-primary-foreground px-8 py-6 text-lg font-body font-semibold rounded-full hover:opacity-90 transition-all duration-200 active:scale-[0.97]"
+              className="rosegold-bg text-white px-8 py-6 text-lg font-body font-semibold rounded-full hover:opacity-90 transition-all duration-200 active:scale-[0.97] shadow-[0_4px_24px_oklch(0.62_0.1_45/0.25)]"
             >
               Quero Meu Diagnóstico Agora
               <ArrowRight className="ml-2 h-5 w-5" />
@@ -182,10 +204,10 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 px-6 border-t border-border/30">
+      <footer className="py-8 px-6 border-t border-border">
         <div className="container max-w-4xl text-center">
           <p className="text-sm text-muted-foreground font-body">
-            © {new Date().getFullYear()} Jessyca Barros — Estrategista de Crescimento Digital
+            © {new Date().getFullYear()} Jessyca Barros — Estrategista Digital
           </p>
         </div>
       </footer>
