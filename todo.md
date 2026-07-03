@@ -16,3 +16,7 @@
 - [x] Adicionar testes Vitest para endpoints quiz.submit e quiz.getTemplateUrl
 - [x] Atualizar identidade visual para corresponder ao rebranding real da Jessyca Barros
 - [x] Adicionar foto da Jessyca na landing page do diagnóstico
+- [x] Refatorar backend para funcionar sem MySQL - usar apenas Notion como banco de dados
+- [x] Remover dependência do DATABASE_URL para deploy na Vercel
+- [x] Testar fluxo completo sem banco MySQL
+- [x] Preparar instruções de deploy para Vercel

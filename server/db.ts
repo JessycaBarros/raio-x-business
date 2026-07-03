@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, leads } from "../drizzle/schema";
+import { InsertUser, users } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,28 +89,9 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// Save a new lead from the quiz
-export async function saveLead(lead: {
-  name: string;
-  email: string;
-  phone: string;
-  profile: string;
-  answers: string;
-}) {
-  const db = await getDb();
-  if (!db) {
-    console.warn("[Database] Cannot save lead: database not available");
-    return;
-  }
-
-  await db.insert(leads).values({
-    name: lead.name,
-    email: lead.email,
-    phone: lead.phone,
-    profile: lead.profile as any,
-    answers: lead.answers,
-  });
-}
+// ==========================================
+// NOTION-ONLY STORAGE (no MySQL needed for leads)
+// ==========================================
 
 // Notion template URLs for each profile
 const NOTION_TEMPLATE_URLS: Record<string, string> = {
@@ -128,7 +109,7 @@ export function getNotionTemplateUrl(profile: string): string {
 }
 
 // Sync lead to Notion database via Notion API
-const NOTION_DATA_SOURCE_ID = "7624f005-5e18-4de4-a478-6e216e33d5d8";
+const NOTION_DATABASE_ID = "670d72ed-26ab-44a9-9140-6d7d5498c31b";
 
 const PROFILE_LABELS: Record<string, string> = {
   visibilidade: "Visibilidade",
@@ -150,7 +131,7 @@ export async function syncLeadToNotion(lead: {
     const notionToken = process.env.NOTION_API_TOKEN;
     
     if (!notionToken) {
-      console.warn("[Notion Sync] NOTION_API_TOKEN not configured, skipping Notion sync");
+      console.error("[Notion Sync] NOTION_API_TOKEN not configured - cannot save lead");
       return false;
     }
 
@@ -164,7 +145,7 @@ export async function syncLeadToNotion(lead: {
         "Notion-Version": "2022-06-28",
       },
       body: JSON.stringify({
-        parent: { database_id: NOTION_DATA_SOURCE_ID },
+        parent: { database_id: NOTION_DATABASE_ID },
         properties: {
           "Nome": { title: [{ text: { content: lead.name } }] },
           "Email": { email: lead.email },
@@ -186,10 +167,4 @@ export async function syncLeadToNotion(lead: {
     console.error("[Notion Sync] Error syncing lead to Notion:", error);
     return false;
   }
-}
-
-export async function markLeadSynced(leadId: number): Promise<void> {
-  const db = await getDb();
-  if (!db) return;
-  await db.update(leads).set({ notionSynced: 1 }).where(eq(leads.id, leadId));
 }

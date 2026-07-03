@@ -3,9 +3,8 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
-import { calculateProfile, PROFILES, type ProfileType, PROFILE_INFO } from "@shared/quiz";
-import { saveLead, getNotionTemplateUrl, syncLeadToNotion } from "./db";
-import { notifyOwner } from "./_core/notification";
+import { calculateProfile, PROFILES, PROFILE_INFO } from "@shared/quiz";
+import { syncLeadToNotion, getNotionTemplateUrl } from "./db";
 
 export const appRouter = router({
   system: systemRouter,
@@ -42,29 +41,33 @@ export const appRouter = router({
         // Calculate the profile
         const profile = calculateProfile(numericAnswers);
 
-        // Save lead to database
-        await saveLead({
+        // Save lead directly to Notion (primary storage)
+        const notionSuccess = await syncLeadToNotion({
           name: input.lead.name,
           email: input.lead.email,
           phone: input.lead.phone,
           profile,
-          answers: JSON.stringify(input.answers),
         });
 
-        // Sync lead to Notion database
-        syncLeadToNotion({
-          name: input.lead.name,
-          email: input.lead.email,
-          phone: input.lead.phone,
-          profile,
-        }).catch(() => {}); // fire and forget
+        if (!notionSuccess) {
+          console.error("[Quiz] Failed to save lead to Notion");
+          // Still return the profile even if Notion sync fails
+        }
 
-        // Notify owner about new lead
+        // Notify owner about new lead (only if forge API is configured)
         const profileTitle = PROFILE_INFO[profile]?.title || profile;
-        notifyOwner({
-          title: `Novo Lead RAIO-X: ${input.lead.name}`,
-          content: `Nome: ${input.lead.name}\nE-mail: ${input.lead.email}\nWhatsApp: ${input.lead.phone}\nPerfil: ${profileTitle}`,
-        }).catch(() => {}); // fire and forget
+        try {
+          const { ENV } = await import("./_core/env");
+          if (ENV.forgeApiUrl && ENV.forgeApiKey) {
+            const { notifyOwner } = await import("./_core/notification");
+            notifyOwner({
+              title: `Novo Lead RAIO-X: ${input.lead.name}`,
+              content: `Nome: ${input.lead.name}\nE-mail: ${input.lead.email}\nWhatsApp: ${input.lead.phone}\nPerfil: ${profileTitle}`,
+            }).catch(() => {});
+          }
+        } catch {
+          // Notification is optional - skip if not configured
+        }
 
         return { profile };
       }),

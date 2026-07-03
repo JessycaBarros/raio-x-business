@@ -2,11 +2,9 @@ import { describe, expect, it, vi } from "vitest";
 import { appRouter } from "./routers";
 import type { TrpcContext } from "./_core/context";
 
-// Mock the database and notification
+// Mock the database - Notion-only (no saveLead/markLeadSynced needed)
 vi.mock("./db", () => ({
-  saveLead: vi.fn().mockResolvedValue(undefined),
   syncLeadToNotion: vi.fn().mockResolvedValue(true),
-  markLeadSynced: vi.fn().mockResolvedValue(undefined),
   getNotionTemplateUrl: vi.fn((profile: string) => {
     const urls: Record<string, string> = {
       visibilidade: "https://app.notion.com/p/test-visibilidade",
@@ -21,11 +19,24 @@ vi.mock("./db", () => ({
   }),
   upsertUser: vi.fn(),
   getUserByOpenId: vi.fn(),
-  getDb: vi.fn(),
+  getDb: vi.fn().mockResolvedValue(null),
 }));
 
 vi.mock("./_core/notification", () => ({
   notifyOwner: vi.fn().mockResolvedValue(true),
+}));
+
+vi.mock("./_core/env", () => ({
+  ENV: {
+    appId: "",
+    cookieSecret: "test-secret",
+    databaseUrl: "",
+    oAuthServerUrl: "",
+    ownerOpenId: "",
+    isProduction: false,
+    forgeApiUrl: "",
+    forgeApiKey: "",
+  },
 }));
 
 function createPublicContext(): TrpcContext {
@@ -41,7 +52,7 @@ function createPublicContext(): TrpcContext {
   };
 }
 
-describe("quiz.submit", () => {
+describe("quiz.submit (Notion-only)", () => {
   it("should classify and return a valid profile", async () => {
     const ctx = createPublicContext();
     const caller = appRouter.createCaller(ctx);
@@ -65,6 +76,35 @@ describe("quiz.submit", () => {
     expect(result).toHaveProperty("profile");
     expect(typeof result.profile).toBe("string");
     expect(result.profile.length).toBeGreaterThan(0);
+  });
+
+  it("should call syncLeadToNotion with correct data", async () => {
+    const { syncLeadToNotion } = await import("./db");
+    const ctx = createPublicContext();
+    const caller = appRouter.createCaller(ctx);
+
+    const result = await caller.quiz.submit({
+      answers: {
+        "1": "1a",
+        "2": "2a",
+        "3": "3a",
+        "4": "4a",
+        "5": "5a",
+        "6": "6a",
+      },
+      lead: {
+        name: "Ana Costa",
+        email: "ana@test.com",
+        phone: "11988887777",
+      },
+    });
+
+    expect(syncLeadToNotion).toHaveBeenCalledWith({
+      name: "Ana Costa",
+      email: "ana@test.com",
+      phone: "11988887777",
+      profile: result.profile,
+    });
   });
 
   it("should reject invalid email", async () => {
