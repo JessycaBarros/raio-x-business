@@ -1,65 +1,66 @@
-// server/_core/index.ts
 import "dotenv/config";
 import express from "express";
 import { createServer } from "http";
-import { fileURLToPath } from "url";
-import { dirname, join } from "path";
-import { appRouter } from "../routers.js";
+import net from "net";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
+import { registerOAuthRoutes } from "./oauth";
+import { registerStorageProxy } from "./storageProxy";
+import { appRouter } from "../routers";
+import { createContext } from "./context";
+import { serveStatic, setupVite } from "./vite";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+function isPortAvailable(port: number): Promise<boolean> {
+  return new Promise(resolve => {
+    const server = net.createServer();
+    server.listen(port, () => {
+      server.close(() => resolve(true));
+    });
+    server.on("error", () => resolve(false));
+  });
+}
 
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-// CORS
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  if (req.method === "OPTIONS") {
-    res.sendStatus(200);
-  } else {
-    next();
+async function findAvailablePort(startPort: number = 3000): Promise<number> {
+  for (let port = startPort; port < startPort + 20; port++) {
+    if (await isPortAvailable(port)) {
+      return port;
+    }
   }
-});
+  throw new Error(`No available port found starting from ${startPort}`);
+}
 
-// Body parsing
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+async function startServer() {
+  const app = express();
+  const server = createServer(app);
+  // Configure body parser with larger size limit for file uploads
+  app.use(express.json({ limit: "50mb" }));
+  app.use(express.urlencoded({ limit: "50mb", extended: true }));
+  registerStorageProxy(app);
+  registerOAuthRoutes(app);
+  // tRPC API
+  app.use(
+    "/api/trpc",
+    createExpressMiddleware({
+      router: appRouter,
+      createContext,
+    })
+  );
+  // development mode uses Vite, production mode uses static files
+  if (process.env.NODE_ENV === "development") {
+    await setupVite(app, server);
+  } else {
+    serveStatic(app);
+  }
 
-// Servir arquivos estáticos do Vite (IMPORTANTE!)
-const distPath = join(__dirname, "../../dist/public");
-app.use(express.static(distPath, { maxAge: "1d" }));
+  const preferredPort = parseInt(process.env.PORT || "3000");
+  const port = await findAvailablePort(preferredPort);
 
-// tRPC routes
-app.use(
-  "/trpc",
-  createExpressMiddleware({
-    router: appRouter,
-  })
-);
+  if (port !== preferredPort) {
+    console.log(`Port ${preferredPort} is busy, using port ${port} instead`);
+  }
 
-// Fallback para SPA (qualquer rota desconhecida vai para index.html)
-app.get("*", (req, res) => {
-  res.sendFile(join(distPath, "index.html"));
-});
+  server.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}/`);
+  });
+}
 
-// Criar servidor HTTP
-const server = createServer(app);
-
-// Iniciar servidor
-server.listen(PORT, () => {
-  console.log(`✅ Servidor rodando em http://localhost:${PORT}`);
-  console.log(`📁 Servindo arquivos estáticos de: ${distPath}`);
-});
-
-// Graceful shutdown
-process.on("SIGTERM", () => {
-  console.log("SIGTERM recebido, encerrando servidor...");
-  server.close();
-});
+startServer().catch(console.error);
