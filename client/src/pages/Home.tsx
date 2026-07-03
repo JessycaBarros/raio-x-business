@@ -25,7 +25,7 @@ export default function Home() {
             >
               {/* Logo */}
               <img
-                src="/manus-storage/logo_01_acea916a.png"
+                src="/images/logo.jpeg"
                 alt="Jessyca Barros - Estrategista Digital"
                 className="h-12 md:h-14 w-auto mb-8 object-contain"
               />
@@ -70,7 +70,7 @@ export default function Home() {
               <div className="relative">
                 <div className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-[oklch(0.62_0.1_45/0.15)] to-[oklch(0.85_0.04_55/0.1)] blur-xl" />
                 <img
-                  src="/manus-storage/jessyca_new_adc024a5.webp"
+                  src="/images/jessyca.jpeg"
                   alt="Jessyca Barros"
                   className="relative rounded-2xl w-full max-w-[240px] md:max-w-[380px] h-auto object-cover shadow-xl border border-[oklch(0.62_0.1_45/0.15)]"
                 />

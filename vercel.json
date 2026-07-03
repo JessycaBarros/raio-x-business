@@ -1,5 +1,9 @@
 {
+  "version": 2,
   "buildCommand": "pnpm build",
-  "outputDirectory": "dist",
-  "devCommand": "pnpm dev"
+  "outputDirectory": "dist/public",
+  "rewrites": [
+    { "source": "/trpc/:path*", "destination": "/api/index" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }

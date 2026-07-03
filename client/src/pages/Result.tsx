@@ -29,7 +29,7 @@ export default function Result() {
       <header className="py-6 px-6 border-b border-border">
         <div className="container max-w-3xl flex items-center justify-center gap-4">
           <img
-            src="/manus-storage/logo_01_acea916a.png"
+            src="/images/logo.jpeg"
             alt="Jessyca Barros"
             className="h-8 w-auto"
           />
@@ -55,7 +55,7 @@ export default function Result() {
               className="mb-6"
             >
               <img
-                src="/manus-storage/jessyca_new_adc024a5.webp"
+                src="/images/jessyca.jpeg"
                 alt="Jessyca Barros"
                 className="w-20 h-20 rounded-full object-cover mx-auto border-2 border-[oklch(0.62_0.1_45/0.3)] shadow-md"
               />

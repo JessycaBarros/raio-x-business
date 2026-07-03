@@ -4,7 +4,7 @@ import express from "express";
 import { createServer } from "http";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
-import { appRouter } from "./routers.js";
+import { appRouter } from "../routers.js";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 
 const __filename = fileURLToPath(import.meta.url);
