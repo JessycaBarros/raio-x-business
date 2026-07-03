@@ -33,7 +33,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Servir arquivos estáticos do Vite (IMPORTANTE!)
-const distPath = join(__dirname, "../../dist");
+const distPath = join(__dirname, "../../dist/public");
 app.use(express.static(distPath, { maxAge: "1d" }));
 
 // tRPC routes
