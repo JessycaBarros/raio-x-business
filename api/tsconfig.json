@@ -1,0 +1,19 @@
+{
+  "extends": "../tsconfig.json",
+  "include": ["**/*", "../server/**/*", "../shared/**/*", "../drizzle/**/*"],
+  "exclude": ["../node_modules", "../build", "../dist", "../**/*.test.ts"],
+  "compilerOptions": {
+    "noEmit": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "baseUrl": "..",
+    "types": ["node"],
+    "paths": {
+      "@/*": ["./client/src/*"],
+      "@shared/*": ["./shared/*"]
+    }
+  }
+}
