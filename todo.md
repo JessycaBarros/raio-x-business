@@ -20,3 +20,4 @@
 - [x] Remover dependência do DATABASE_URL para deploy na Vercel
 - [x] Testar fluxo completo sem banco MySQL
 - [x] Preparar instruções de deploy para Vercel
+- [x] Instalar pixel da Meta (Facebook) na página para rastreamento de conversões
